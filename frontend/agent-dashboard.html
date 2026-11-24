@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Agent Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="navbar navbar-dark custom-navbar">
+  <div class="container">
+    <span class="navbar-brand">Agent Dashboard</span>
+    <div>
+      <span class="text-white me-3">
+        Welcome, <span id="agentName"></span>
+      </span>
+      <button class="btn btn-warning" onclick="logout()">Logout</button>
+    </div>
+  </div>
+</nav>
+
+<div class="container py-4">
+  <div class="card shadow rounded-4 p-4">
+    <div class="d-flex justify-content-between mb-3">
+      <h4>My Assigned Requests</h4>
+      <button class="btn booking-btn" onclick="loadRequests()">Load</button>
+    </div>
+
+    <div id="requestList"></div>
+  </div>
+</div>
+
+<script>
+if (!localStorage.getItem("agentToken")) {
+  window.location.href = "agent-login.html";
+}
+
+document.getElementById("agentName").innerText =
+  localStorage.getItem("agentName");
+
+function logout() {
+  localStorage.clear();
+  window.location.href = "agent-login.html";
+}
+
+async function loadRequests() {
+  const agentId = localStorage.getItem("agentId");
+
+  const res = await fetch(
+    `http://localhost:8081/api/admin/agent-requests/${agentId}`,
+    {
+      headers: {
+        "Authorization": "Bearer " + localStorage.getItem("agentToken")
+      }
+    }
+  );
+
+  const data = await res.json();
+
+  let html = "";
+
+  if (data.length === 0) {
+    html = "<p>No assigned requests</p>";
+  } else {
+    data.forEach(r => {
+
+      const mapLink = (r.latitude && r.longitude)
+        ? `https://www.google.com/maps?q=${r.latitude},${r.longitude}`
+        : null;
+
+      html += `
+        <div class="service-card mt-3">
+          <b>Request ID:</b> ${r.id}<br>
+          <b>Issue:</b> ${r.issueType}<br>
+          <b>Vehicle:</b> ${r.vehicleType}<br>
+          <b>Status:</b> ${r.status}<br><br>
+
+          ${mapLink
+            ? `<a href="${mapLink}" target="_blank" class="btn btn-dark btn-sm me-2">Navigate</a>`
+            : `<button class="btn btn-secondary btn-sm me-2" disabled>No Location</button>`
+          }
+
+          <button class="btn btn-warning btn-sm me-2"
+            onclick="updateStatus(${r.id}, 'IN_PROGRESS')">
+            Start
+          </button>
+
+          <button class="btn btn-success btn-sm"
+            onclick="updateStatus(${r.id}, 'COMPLETED')">
+            Complete
+          </button>
+        </div>
+      `;
+    });
+  }
+
+  document.getElementById("requestList").innerHTML = html;
+}
+
+async function updateStatus(id, status) {
+  const res = await fetch(
+    `http://localhost:8081/api/agents/requests/${id}/${status}`,
+    {
+      method: "PUT",
+      headers: {
+        "Authorization": "Bearer " + localStorage.getItem("agentToken")
+      }
+    }
+  );
+
+  const text = await res.text();
+  alert(text);
+
+  loadRequests();
+}
+</script>
+
+</body>
+</html>

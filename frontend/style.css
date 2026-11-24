@@ -1,0 +1,259 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #fff8f7;
+  color: #38000A;
+}
+
+.custom-navbar {
+  background: #38000A;
+}
+
+.navbar-brand,
+.nav-link {
+  color: white !important;
+}
+
+.nav-link:hover {
+  color: #FFA896 !important;
+}
+
+.nav-register-btn {
+  background-color: #CD1C18;
+  color: white !important;
+  border: none;
+}
+
+.nav-register-btn:hover {
+  background-color: #9B1313;
+}
+
+.hero-section {
+  background: linear-gradient(135deg, #38000A, #9B1313, #CD1C18);
+  color: white;
+}
+
+.hero-badge {
+  display: inline-block;
+  background-color: #FFA896;
+  color: #38000A;
+  padding: 8px 16px;
+  border-radius: 30px;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.hero-title {
+  font-size: 48px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.hero-text {
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.hero-btn-primary {
+  background-color: #FFA896;
+  color: #38000A;
+  border: none;
+  font-weight: bold;
+}
+
+.hero-btn-primary:hover {
+  background-color: #ffd0c4;
+  color: #38000A;
+}
+
+.hero-btn-outline {
+  border: 2px solid #FFA896;
+  color: white;
+  font-weight: bold;
+}
+
+.hero-btn-outline:hover {
+  background-color: #FFA896;
+  color: #38000A;
+}
+
+.hero-highlights {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  font-size: 15px;
+}
+
+.hero-highlights i {
+  color: #FFA896;
+  margin-right: 6px;
+}
+
+.hero-image-card {
+  background: rgba(255, 255, 255, 0.08);
+  padding: 15px;
+  border-radius: 24px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+}
+
+.hero-image {
+  width: 100%;
+  border-radius: 18px;
+  object-fit: cover;
+}
+
+.booking-section {
+  margin-top: -45px;
+  position: relative;
+  z-index: 2;
+}
+
+.booking-card {
+  background: white;
+  border-radius: 22px;
+  padding: 30px;
+}
+
+.booking-btn {
+  background-color: #CD1C18;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  text-decoration: none;
+  border-radius: 8px;
+  display: inline-block;
+  text-align: center;
+  font-weight: bold;
+}
+
+.booking-btn:hover {
+  background-color: #9B1313;
+  color: white;
+}
+
+.section-title {
+  font-size: 36px;
+  font-weight: 800;
+  color: #38000A;
+}
+
+.section-subtitle {
+  color: #7a4d53;
+}
+
+.light-text {
+  color: #ffd7ce;
+}
+
+.service-card {
+  background: white;
+  border-radius: 20px;
+  padding: 25px;
+  box-shadow: 0 8px 24px rgba(56, 0, 10, 0.08);
+  transition: 0.3s;
+  border-top: 4px solid #CD1C18;
+}
+
+.service-card:hover {
+  transform: translateY(-6px);
+}
+
+.service-icon {
+  width: 60px;
+  height: 60px;
+  background: #FFA896;
+  color: #9B1313;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  margin-bottom: 15px;
+}
+
+.why-section {
+  background: linear-gradient(135deg, #9B1313, #38000A);
+}
+
+.feature-card {
+  background: white;
+  border-radius: 18px;
+  padding: 25px 20px;
+  text-align: center;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.feature-card i {
+  font-size: 34px;
+  color: #CD1C18;
+  margin-bottom: 12px;
+}
+
+.feature-card h6 {
+  font-weight: 700;
+  color: #38000A;
+}
+
+.step-card {
+  background: white;
+  border-radius: 18px;
+  padding: 30px 20px;
+  box-shadow: 0 8px 20px rgba(56, 0, 10, 0.08);
+}
+
+.step-number {
+  width: 55px;
+  height: 55px;
+  margin: 0 auto 15px;
+  border-radius: 50%;
+  background-color: #CD1C18;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.footer-section {
+  background-color: #38000A;
+}
+
+.footer-text {
+  color: #ffd7ce;
+}
+
+@media (max-width: 991px) {
+  .hero-title {
+    font-size: 36px;
+  }
+
+  .booking-section {
+    margin-top: 20px;
+  }
+}
+.login-card {
+  border-radius: 20px;
+}
+
+.login-card {
+  border-radius: 20px;
+  max-width: 420px;
+  width: 100%;
+}
+
+.card {
+  border: none;
+}
+
+.form-control, .form-select {
+  border-radius: 10px;
+  padding: 12px;
+}
+
+.service-card {
+  background: white;
+  border-radius: 18px;
+  padding: 20px;
+  box-shadow: 0 8px 20px rgba(56, 0, 10, 0.08);
+  border-left: 5px solid #CD1C18;
+}

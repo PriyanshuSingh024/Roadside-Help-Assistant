@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Panel</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<nav class="navbar navbar-dark custom-navbar">
+  <div class="container">
+    <span class="navbar-brand">Admin Panel</span>
+    <div>
+      <span class="text-white me-3" id="adminName"></span>
+      <a href="admin-agent-register.html" class="btn btn-light me-2">Register Agent</a>
+      <button class="btn btn-danger me-2" onclick="logout()">Logout</button>
+      <a href="index.html" class="btn btn-warning">Home</a>
+    </div>
+  </div>
+</nav>
+
+<div class="container py-4">
+  <div class="row g-4">
+
+    <!-- Requests -->
+    <div class="col-lg-7">
+      <div class="card shadow rounded-4 p-4 h-100">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h4 class="mb-0">All Service Requests</h4>
+          <button class="btn booking-btn" onclick="loadAllRequests()">Load Requests</button>
+        </div>
+        <div id="adminRequestList"></div>
+      </div>
+    </div>
+
+    <!-- Agents + Assign -->
+    <div class="col-lg-5">
+
+      <div class="card shadow rounded-4 p-4 mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h4 class="mb-0">All Agents</h4>
+          <button class="btn booking-btn" onclick="loadAgents()">Load Agents</button>
+        </div>
+        <div id="agentList"></div>
+      </div>
+
+      <div class="card shadow rounded-4 p-4">
+        <h4 class="mb-3">Assign Request to Agent</h4>
+
+        <input type="number" id="requestId" class="form-control mb-3" placeholder="Enter Request ID">
+        <input type="number" id="agentId" class="form-control mb-3" placeholder="Enter Agent ID">
+
+        <button class="btn booking-btn w-100" onclick="assignRequestToAgent()">Assign Request</button>
+
+        <p id="assignMsg" class="mt-3 fw-semibold text-center"></p>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+
+// 🔐 Check login
+if (!localStorage.getItem("adminToken")) {
+  window.location.href = "admin-login.html";
+}
+
+// Show admin name
+document.getElementById("adminName").innerText =
+  "Welcome, " + localStorage.getItem("adminName");
+
+// Logout
+function logout() {
+  localStorage.clear();
+  window.location.href = "admin-login.html";
+}
+
+// Load Requests
+async function loadAllRequests() {
+  const res = await fetch("http://localhost:8081/api/admin/requests", {
+    headers: {
+      "Authorization": "Bearer " + localStorage.getItem("adminToken")
+    }
+  });
+
+  const text = await res.text();
+
+  try {
+    const data = JSON.parse(text);
+    let html = "";
+
+    if (data.length === 0) {
+      html = `<p>No requests found.</p>`;
+    } else {
+      data.forEach(r => {
+        const agentName = r.assignedAgent ? r.assignedAgent.name : "Not Assigned";
+        const agentId = r.assignedAgent ? r.assignedAgent.id : "-";
+
+        const mapLink = (r.latitude && r.longitude)
+          ? `https://www.google.com/maps?q=${r.latitude},${r.longitude}`
+          : null;
+
+        html += `
+          <div class="service-card mt-3">
+            <b>Request ID:</b> ${r.id}<br>
+            <b>Issue:</b> ${r.issueType}<br>
+            <b>Vehicle:</b> ${r.vehicleType}<br>
+            <b>Vehicle Number:</b> ${r.vehicleNumber}<br>
+            <b>Location:</b> ${r.location}<br>
+            <b>Description:</b> ${r.description}<br>
+            <b>Status:</b> ${r.status}<br>
+            <b>Assigned Agent:</b> ${agentName}<br>
+            <b>Agent ID:</b> ${agentId}<br><br>
+
+            ${mapLink
+              ? `<a href="${mapLink}" target="_blank" class="btn btn-dark btn-sm me-2">View Location</a>`
+              : `<button class="btn btn-secondary btn-sm me-2" disabled>No Location</button>`
+            }
+
+            <button class="btn btn-warning btn-sm me-2"
+              onclick="updateStatus(${r.id}, 'IN_PROGRESS')">
+              Start
+            </button>
+
+            <button class="btn btn-success btn-sm"
+              onclick="updateStatus(${r.id}, 'COMPLETED')">
+              Complete
+            </button>
+          </div>
+        `;
+      });
+    }
+
+    document.getElementById("adminRequestList").innerHTML = html;
+
+  } catch {
+    document.getElementById("adminRequestList").innerHTML =
+      `<p class="text-danger fw-bold">${text}</p>`;
+  }
+}
+
+// Load Agents
+async function loadAgents() {
+  const res = await fetch("http://localhost:8081/api/agents");
+  const data = await res.json();
+
+  let html = "";
+
+  if (data.length === 0) {
+    html = `<p>No agents found.</p>`;
+  } else {
+    data.forEach(agent => {
+      html += `
+        <div class="service-card mt-3">
+          <b>Agent ID:</b> ${agent.id}<br>
+          <b>Name:</b> ${agent.name}<br>
+          <b>Email:</b> ${agent.email}<br>
+          <b>Phone:</b> ${agent.phone}<br>
+          <b>Status:</b> ${agent.status}
+        </div>
+      `;
+    });
+  }
+
+  document.getElementById("agentList").innerHTML = html;
+}
+
+// Assign Request
+async function assignRequestToAgent() {
+  const requestId = document.getElementById("requestId").value;
+  const agentId = document.getElementById("agentId").value;
+
+  if (!requestId || !agentId) {
+    document.getElementById("assignMsg").innerText =
+      "Please enter both Request ID and Agent ID";
+    return;
+  }
+
+  const res = await fetch(
+    `http://localhost:8081/api/admin/assign-agent/${requestId}/${agentId}`,
+    {
+      method: "PUT",
+      headers: {
+        "Authorization": "Bearer " + localStorage.getItem("adminToken")
+      }
+    }
+  );
+
+  const text = await res.text();
+  document.getElementById("assignMsg").innerText = text;
+
+  loadAllRequests();
+}
+
+// Update Status
+async function updateStatus(id, status) {
+  const res = await fetch(
+    `http://localhost:8081/api/admin/requests/${id}/${status}`,
+    {
+      method: "PUT",
+      headers: {
+        "Authorization": "Bearer " + localStorage.getItem("adminToken")
+      }
+    }
+  );
+
+  const text = await res.text();
+  alert(text);
+
+  loadAllRequests();
+}
+
+</script>
+
+</body>
+</html>
