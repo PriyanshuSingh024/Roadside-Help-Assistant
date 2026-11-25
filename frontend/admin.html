@@ -79,7 +79,7 @@ function logout() {
 
 // Load Requests
 async function loadAllRequests() {
-  const res = await fetch("http://localhost:8081/api/admin/requests", {
+  const res = await fetch("http://16.16.183.165:8081/api/admin/requests", {
     headers: {
       "Authorization": "Bearer " + localStorage.getItem("adminToken")
     }
@@ -143,7 +143,7 @@ async function loadAllRequests() {
 
 // Load Agents
 async function loadAgents() {
-  const res = await fetch("http://localhost:8081/api/agents");
+  const res = await fetch("http://16.16.183.165:8081/api/agents");
   const data = await res.json();
 
   let html = "";
@@ -179,7 +179,7 @@ async function assignRequestToAgent() {
   }
 
   const res = await fetch(
-    `http://localhost:8081/api/admin/assign-agent/${requestId}/${agentId}`,
+    `http://16.16.183.165:8081/api/admin/assign-agent/${requestId}/${agentId}`,
     {
       method: "PUT",
       headers: {
@@ -197,7 +197,7 @@ async function assignRequestToAgent() {
 // Update Status
 async function updateStatus(id, status) {
   const res = await fetch(
-    `http://localhost:8081/api/admin/requests/${id}/${status}`,
+    `http://16.16.183.165:8081/api/admin/requests/${id}/${status}`,
     {
       method: "PUT",
       headers: {

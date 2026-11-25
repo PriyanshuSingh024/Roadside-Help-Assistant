@@ -45,7 +45,7 @@ async function registerAgent() {
     phone: document.getElementById("phone").value
   };
 
-  const res = await fetch("http://localhost:8081/api/agents/register", {
+  const res = await fetch("http://16.16.183.165:8081/api/agents/register", {
     method: "POST",
     headers: {"Content-Type": "application/json"},
     body: JSON.stringify(data)

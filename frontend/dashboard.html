@@ -106,7 +106,7 @@ async function createRequest() {
         longitude: longitude
       };
 
-      const res = await fetch("http://localhost:8081/api/requests", {
+      const res = await fetch("http://16.16.183.165:8081/api/requests", {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify(data)
@@ -124,7 +124,7 @@ async function createRequest() {
 async function loadRequests() {
   const userId = localStorage.getItem("userId");
 
-  const res = await fetch("http://localhost:8081/api/requests/user/" + userId);
+  const res = await fetch("http://16.16.183.165:8081/api/requests/user/" + userId);
   const data = await res.json();
 
   let html = "";

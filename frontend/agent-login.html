@@ -31,7 +31,7 @@ async function agentLogin() {
     password: document.getElementById("password").value
   };
 
-  const res = await fetch("http://localhost:8081/api/agents/login", {
+  const res = await fetch("http://16.16.183.165:8081/api/agents/login", {
     method: "POST",
     headers: {"Content-Type": "application/json"},
     body: JSON.stringify(data)

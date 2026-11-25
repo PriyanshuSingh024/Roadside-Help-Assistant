@@ -47,7 +47,7 @@ async function loadRequests() {
   const agentId = localStorage.getItem("agentId");
 
   const res = await fetch(
-    `http://localhost:8081/api/admin/agent-requests/${agentId}`,
+    `http://16.16.183.165:8081/api/admin/agent-requests/${agentId}`,
     {
       headers: {
         "Authorization": "Bearer " + localStorage.getItem("agentToken")
@@ -99,7 +99,7 @@ async function loadRequests() {
 
 async function updateStatus(id, status) {
   const res = await fetch(
-    `http://localhost:8081/api/agents/requests/${id}/${status}`,
+    `http://16.16.183.165:8081/api/agents/requests/${id}/${status}`,
     {
       method: "PUT",
       headers: {
